@@ -7,6 +7,13 @@ import { useDispatch, useSelector } from "react-redux"
 // Import `useHistory` to handle automatic navigation to the next page
 import { useHistory } from "react-router-dom"
 
+// Import `Formik` tools
+import { Formik, Form } from "formik"
+import * as Yup from 'yup'
+
+// Import the needed components
+import InputField from "../Utilities/InputField"
+
 
 // Function that handles the user input of their understanding
 export default function Understanding() {
@@ -61,7 +68,40 @@ export default function Understanding() {
             
             <h2>How well are you understanding the content?</h2>
 
-            <form onSubmit={onSubmitUnderstanding}>
+            <Formik 
+                initialValues={{
+                    understandingInput: "",
+                }}
+                validationSchema={Yup.object({
+                    understandingInput: Yup.number()
+                    .min(0, "Can not be less than zero")
+                    .max(10, "Can not be greater than 10")
+                    .required("Required")
+                })}
+                onSubmit={values => {
+                    checkValidInput(values)
+                    setUnderstandingInput(values)
+                    onSubmitUnderstanding()
+                }}
+            >
+
+                <Form>
+                    <InputField
+                        label="Understanding"
+                        name="understandingInput"
+                        type="number"
+                        placeholder="0 - 10"
+                    />
+                    {/* {isComplete ? */}
+                        <button type="submit">Next</button>
+                        {/* :
+                        <button disabled>Fix Response</button>
+                    } */}
+                </Form>
+
+            </Formik>
+
+            {/* <form onSubmit={onSubmitUnderstanding}>
                 <input
                     type="text"
                     placeholder="0 - 10"
@@ -77,7 +117,7 @@ export default function Understanding() {
                     :
                     <button type="submit" disabled>Fix Response</button>
                 }
-            </form>
+            </form> */}
 
         </section>
     )
