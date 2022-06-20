@@ -68,7 +68,7 @@ export default function Understanding() {
             
             <h2>How well are you understanding the content?</h2>
 
-            <Formik 
+            {/* <Formik 
                 initialValues={{
                     understandingInput: "",
                 }}
@@ -92,16 +92,16 @@ export default function Understanding() {
                         type="number"
                         placeholder="0 - 10"
                     />
-                    {/* {isComplete ? */}
+                    {isComplete ?
                         <button type="submit">Next</button>
-                        {/* :
+                        :
                         <button disabled>Fix Response</button>
-                    } */}
+                    }
                 </Form>
 
-            </Formik>
+            </Formik> */}
 
-            {/* <form onSubmit={onSubmitUnderstanding}>
+            <form onSubmit={onSubmitUnderstanding}>
                 <input
                     type="text"
                     placeholder="0 - 10"
@@ -117,7 +117,7 @@ export default function Understanding() {
                     :
                     <button type="submit" disabled>Fix Response</button>
                 }
-            </form> */}
+            </form>
 
         </section>
     )
