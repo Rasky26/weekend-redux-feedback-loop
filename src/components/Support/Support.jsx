@@ -2,7 +2,7 @@
 import { useState } from "react"
 
 // Import `useDispatch` to send the information to REDUX
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 // Import `useHistory` to handle automatic navigation to the next page
 import { useHistory } from "react-router-dom"
@@ -12,9 +12,11 @@ import { useHistory } from "react-router-dom"
 export default function Support() {
 
     // Track the input in STATE
-    const [supportInput, setSupportInput] = useState("")
+    // const [supportInput, setSupportInput] = useState("")
     const [isComplete, setIsComplete] = useState(false)
 
+    // Get the redux state of the variable
+    let supportInput = useSelector(store => store.feedback.support)
     // Set the `dispatch` method
     const dispatch = useDispatch()
     // Set the `history` method
@@ -30,9 +32,7 @@ export default function Support() {
         )
     }
 
-    // On submission, store the current input value to the REDUX store.
-    // All submissions will be contained within a singular REDUX object.
-    const onSubmitSupport = () => {
+    const setSupportInput = (value) => {
 
         // Dipatch the local state value to be stored within REDUX
         dispatch({
@@ -42,9 +42,14 @@ export default function Support() {
             // Key name matches the REDUX store value in the object.
             payload: {
                 field: 'support',
-                value: Number(supportInput)
+                value: Number(value)
             },
         })
+    }
+
+    // On submission, store the current input value to the REDUX store.
+    // All submissions will be contained within a singular REDUX object.
+    const onSubmitSupport = () => {
 
         history.push("/comments")
     }
@@ -61,7 +66,7 @@ export default function Support() {
                     placeholder="0 - 10"
                     value={supportInput}
                     onChange={e => {
-                        setFeelingInput(e.target.value)
+                        setSupportInput(e.target.value)
                         checkValidInput(e.target.value)
                     }}
                     autoFocus

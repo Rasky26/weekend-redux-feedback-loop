@@ -1,8 +1,8 @@
 // Import `useState` to track the input field
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // Import `useDispatch` to send the information to REDUX
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 // Import `useHistory` to handle automatic navigation to the next page
 import { useHistory } from "react-router-dom"
@@ -12,13 +12,15 @@ import { useHistory } from "react-router-dom"
 export default function Understanding() {
 
     // Track the input in STATE
-    const [understandingInput, setUnderstandingInput] = useState("")
     const [isComplete, setIsComplete] = useState(false)
 
+    // Get the redux state of the variable
+    let understandingInput = useSelector(store => store.feedback.understanding)
     // Set the `dispatch` method
     const dispatch = useDispatch()
     // Set the `history` method
     const history = useHistory()
+    
 
     // Function that checks if input is entered and is valid
     const checkValidInput = (value) => {
@@ -30,9 +32,7 @@ export default function Understanding() {
         )
     }
 
-    // On submission, store the current input value to the REDUX store.
-    // All submissions will be contained within a singular REDUX object.
-    const onSubmitUnderstanding = () => {
+    const setUnderstandingInput = (value) => {
 
         // Dipatch the local state value to be stored within REDUX
         dispatch({
@@ -42,10 +42,16 @@ export default function Understanding() {
             // Key name matches the REDUX store value in the object.
             payload: {
                 field: 'understanding',
-                value: Number(understandingInput)
+                value: Number(value)
             },
         })
+    }
 
+    // On submission, store the current input value to the REDUX store.
+    // All submissions will be contained within a singular REDUX object.
+    const onSubmitUnderstanding = () => {
+
+        // Navigate to the next page
         history.push("/support")
     }
 
@@ -61,7 +67,7 @@ export default function Understanding() {
                     placeholder="0 - 10"
                     value={understandingInput}
                     onChange={e => {
-                        setFeelingInput(e.target.value)
+                        setUnderstandingInput(e.target.value)
                         checkValidInput(e.target.value)
                     }}
                     autoFocus
