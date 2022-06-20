@@ -2,7 +2,7 @@
 import { useState } from "react"
 
 // Import `useDispatch` to send the information to REDUX
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 // Import `useHistory` to handle automatic navigation to the next page
 import { useHistory } from "react-router-dom"
@@ -12,9 +12,10 @@ import { useHistory } from "react-router-dom"
 export default function Feeling() {
 
     // Track the input in STATE
-    const [feelingInput, setFeelingInput] = useState("")
     const [isComplete, setIsComplete] = useState(false)
 
+    // Get the redux state of the variable
+    let feelingInput = useSelector(store => store.feedback.feeling)
     // Set the `dispatch` method
     const dispatch = useDispatch()
     // Set the `history` method
@@ -30,9 +31,7 @@ export default function Feeling() {
         )
     }
 
-    // On submission, store the current input value to the REDUX store.
-    // All submissions will be contained within a singular REDUX object.
-    const onSubmitFeeling = () => {
+    const setFeelingInput = (value) => {
 
         // Dipatch the local state value to be stored within REDUX
         dispatch({
@@ -42,9 +41,15 @@ export default function Feeling() {
             // Key name matches the REDUX store value in the object.
             payload: {
                 field: 'feeling',
-                value: Number(feelingInput)
+                value: Number(value)
             },
         })
+    }
+
+
+    // On submission, store the current input value to the REDUX store.
+    // All submissions will be contained within a singular REDUX object.
+    const onSubmitFeeling = () => {
 
         history.push("/understanding")
     }

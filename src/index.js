@@ -21,9 +21,9 @@ import './index.css';
 const feedback = (
     state = {
     // Store all feedback values in a single object for easy reference
-        feeling: null,
-        understanding: null,
-        support: null,
+        feeling: "",
+        understanding: "",
+        support: "",
         comments: "",
     },
     // Holds information related to the STATE that should be updated

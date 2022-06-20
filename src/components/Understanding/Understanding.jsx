@@ -1,24 +1,33 @@
 // Import `useState` to track the input field
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // Import `useDispatch` to send the information to REDUX
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 // Import `useHistory` to handle automatic navigation to the next page
 import { useHistory } from "react-router-dom"
+
+// Import `Formik` tools
+import { Formik, Form } from "formik"
+import * as Yup from 'yup'
+
+// Import the needed components
+import InputField from "../Utilities/InputField"
 
 
 // Function that handles the user input of their understanding
 export default function Understanding() {
 
     // Track the input in STATE
-    const [understandingInput, setUnderstandingInput] = useState("")
     const [isComplete, setIsComplete] = useState(false)
 
+    // Get the redux state of the variable
+    let understandingInput = useSelector(store => store.feedback.understanding)
     // Set the `dispatch` method
     const dispatch = useDispatch()
     // Set the `history` method
     const history = useHistory()
+    
 
     // Function that checks if input is entered and is valid
     const checkValidInput = (value) => {
@@ -30,9 +39,7 @@ export default function Understanding() {
         )
     }
 
-    // On submission, store the current input value to the REDUX store.
-    // All submissions will be contained within a singular REDUX object.
-    const onSubmitUnderstanding = () => {
+    const setUnderstandingInput = (value) => {
 
         // Dipatch the local state value to be stored within REDUX
         dispatch({
@@ -42,10 +49,16 @@ export default function Understanding() {
             // Key name matches the REDUX store value in the object.
             payload: {
                 field: 'understanding',
-                value: Number(understandingInput)
+                value: Number(value)
             },
         })
+    }
 
+    // On submission, store the current input value to the REDUX store.
+    // All submissions will be contained within a singular REDUX object.
+    const onSubmitUnderstanding = () => {
+
+        // Navigate to the next page
         history.push("/support")
     }
 
@@ -55,13 +68,46 @@ export default function Understanding() {
             
             <h2>How well are you understanding the content?</h2>
 
-            <form onSubmit={onSubmitUnderstanding}>
+            <Formik 
+                initialValues={{
+                    understandingInput: "",
+                }}
+                validationSchema={Yup.object({
+                    understandingInput: Yup.number()
+                    .min(0, "Can not be less than zero")
+                    .max(10, "Can not be greater than 10")
+                    .required("Required")
+                })}
+                onSubmit={values => {
+                    checkValidInput(values)
+                    setUnderstandingInput(values)
+                    onSubmitUnderstanding()
+                }}
+            >
+
+                <Form>
+                    <InputField
+                        label="Understanding"
+                        name="understandingInput"
+                        type="number"
+                        placeholder="0 - 10"
+                    />
+                    {/* {isComplete ? */}
+                        <button type="submit">Next</button>
+                        {/* :
+                        <button disabled>Fix Response</button>
+                    } */}
+                </Form>
+
+            </Formik>
+
+            {/* <form onSubmit={onSubmitUnderstanding}>
                 <input
                     type="text"
                     placeholder="0 - 10"
                     value={understandingInput}
                     onChange={e => {
-                        setFeelingInput(e.target.value)
+                        setUnderstandingInput(e.target.value)
                         checkValidInput(e.target.value)
                     }}
                     autoFocus
@@ -71,7 +117,7 @@ export default function Understanding() {
                     :
                     <button type="submit" disabled>Fix Response</button>
                 }
-            </form>
+            </form> */}
 
         </section>
     )
