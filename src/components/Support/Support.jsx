@@ -8,11 +8,11 @@ import { useDispatch } from "react-redux"
 import { useHistory } from "react-router-dom"
 
 
-// Function that handles the user input of their feelings
-export default function Feeling() {
+// Function that handles the user input of their supported value
+export default function Support() {
 
     // Track the input in STATE
-    const [feelingInput, setFeelingInput] = useState("")
+    const [supportInput, setSupportInput] = useState("")
 
     // Set the `dispatch` method
     const dispatch = useDispatch()
@@ -22,7 +22,7 @@ export default function Feeling() {
 
     // On submission, store the current input value to the REDUX store.
     // All submissions will be contained within a singular REDUX object.
-    const onSubmitFeeling = () => {
+    const onSubmitSupport = () => {
 
         // Dipatch the local state value to be stored within REDUX
         dispatch({
@@ -31,33 +31,29 @@ export default function Feeling() {
             // Pass the payload with the specific key name.
             // Key name matches the REDUX store value in the object.
             payload: {
-                field: 'feeling',
-                value: Number(feelingInput)
+                field: 'support',
+                value: Number(supportInput)
             },
         })
 
-        history.push("/understanding")
+        history.push("/comments")
     }
 
     // Handles the display of the form to the DOM
     return (
         <section>
             
-            <h2>How are you feeling today?</h2>
+            <h2>How well are you being supported?</h2>
 
-            <form onSubmit={onSubmitFeeling}>
+            <form onSubmit={onSubmitSupport}>
                 <input
                     type="text"
                     placeholder="0 - 10"
-                    value={feelingInput}
-                    onChange={e => setFeelingInput(e.target.value)}
+                    value={supportInput}
+                    onChange={e => setSupportInput(e.target.value)}
                     autoFocus
                 />
-                {/* {noError ? */}
-                    <button type="submit">Next</button>
-                    {/* : */}
-                    {/* <button type="submit" disabled>Response Required</button> */}
-                {/* } */}
+                <button type="submit">Next</button>
             </form>
 
         </section>

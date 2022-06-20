@@ -1,7 +1,6 @@
+// Import the core libraries
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/App/App';
 import registerServiceWorker from './registerServiceWorker';
 
 // Import the REDUX components to be used
@@ -11,17 +10,24 @@ import { Provider } from 'react-redux';
 // Use the `logger` for development
 import logger from 'redux-logger';
 
+// Import the key components used to build this section
+import App from './components/App/App';
+
+// Import the base stylesheet used throughout the entire App
+import './index.css';
+
 
 // Set our emotion tracker reducer to simply contain a single object
-const feeback = (state = {
-    feeling: 0,
-    understanding: 0,
-    support: 0,
-    comments: "",
-}, action) => {
-
-
-    console.log(action, state, "<>>>>>>>>>>>.")
+const feedback = (
+    state = {
+    // Store all feedback values in a single object for easy reference
+        feeling: null,
+        understanding: null,
+        support: null,
+        comments: "",
+    },
+    // Holds information related to the STATE that should be updated
+    action) => {
 
     // Switch statements to update the `feedback` object
     switch (action.type) {
@@ -48,7 +54,7 @@ const store = createStore(
     // Combine all the reducers into a shared object.
     // This could potentially become a substantial `Big Assignment Object`.
     combineReducers({
-        feeback,
+        feedback,
     }), applyMiddleware(
         logger,
     )
