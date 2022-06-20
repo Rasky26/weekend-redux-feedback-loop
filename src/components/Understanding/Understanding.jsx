@@ -13,12 +13,22 @@ export default function Understanding() {
 
     // Track the input in STATE
     const [understandingInput, setUnderstandingInput] = useState("")
+    const [isComplete, setIsComplete] = useState(false)
 
     // Set the `dispatch` method
     const dispatch = useDispatch()
     // Set the `history` method
     const history = useHistory()
 
+    // Function that checks if input is entered and is valid
+    const checkValidInput = (value) => {
+        setIsComplete(
+            value !== null &&
+            value.trim() &&
+            Number(value) >= 0 &&
+            Number(value) <= 10
+        )
+    }
 
     // On submission, store the current input value to the REDUX store.
     // All submissions will be contained within a singular REDUX object.
@@ -50,10 +60,17 @@ export default function Understanding() {
                     type="text"
                     placeholder="0 - 10"
                     value={understandingInput}
-                    onChange={e => setUnderstandingInput(e.target.value)}
+                    onChange={e => {
+                        setFeelingInput(e.target.value)
+                        checkValidInput(e.target.value)
+                    }}
                     autoFocus
                 />
-                <button type="submit">Next</button>
+                {isComplete ?
+                    <button type="submit">Next</button>
+                    :
+                    <button type="submit" disabled>Fix Response</button>
+                }
             </form>
 
         </section>
